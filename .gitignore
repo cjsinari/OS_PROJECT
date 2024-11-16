@@ -1,0 +1,21 @@
+# Unity generated files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+[Mm]arkers/
+.vs/
+.idea/
+.vscode/
+
+# Auto-generated files
+*.csproj
+*.sln
+*.userprefs
+
+# OS specific
+.DS_Store
+Thumbs.db
