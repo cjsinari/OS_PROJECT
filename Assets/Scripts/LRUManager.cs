@@ -9,12 +9,20 @@ public class LRUManager : MonoBehaviour
     public Transform memoryPanel; //panel to display sticky notes
     public InputField noteInputField; //input field to enter note ID
     public int maxNotes = 4;  //max no. of sticky notes in memory
+    public Text hitCounterText; //text element to show page hits
+    public Text missCounterText; //text element to show page misses
+
 
     //List of note GameObjects in memory   
     private List<GameObject> noteObjects = new List<GameObject>();
 
     //Lookup for quick sticky note access
     private Dictionary<int, GameObject> noteLookup = new Dictionary<int, GameObject>();
+
+    //Page hit and miss counters
+    private int pageHits = 0;
+    private int pageMisses = 0;
+
 
     //Method to access a sticky note
     public void AccessNote()
@@ -44,7 +52,10 @@ public class LRUManager : MonoBehaviour
         //move it to the most recently used position
         if (noteLookup.ContainsKey(noteID))
         {
-            Debug.Log($"Sticky note {noteID} is already in memory!");
+            Debug.Log($"Sticky note {noteID} is already in memory! (Page hit)");
+            pageHits++;
+            UpdateCounters();
+
             GameObject noteObject = noteLookup[noteID];
 
             //Move to end (most recently used)
@@ -56,7 +67,9 @@ public class LRUManager : MonoBehaviour
         }
 
         //If note is not in memory
-        Debug.Log($"Note {noteID} is not in memory. Loading page...");
+        Debug.Log($"Note {noteID} is not in memory. Loading page... (Page miss)");
+        pageMisses++;
+        UpdateCounters();
         AddNoteToMemory(noteID);
 
     }
@@ -99,6 +112,21 @@ public class LRUManager : MonoBehaviour
             RectTransform rect = noteObjects[i].GetComponent<RectTransform>();
             rect.SetSiblingIndex(i); // Ensure the visual order matches the logical order
         }
+    }
+
+    //Update the hit and miss counters on UI
+    private void UpdateCounters()
+    {
+        if (hitCounterText != null)
+        {
+            hitCounterText.text = $"Hits: {pageHits}";
+        }
+
+        if(missCounterText != null)
+        {
+            missCounterText.text = $"Misses: {pageMisses}";
+        }
+
     }
 
 
